@@ -46,6 +46,8 @@ docker compose up --build
 
 The Compose stack provides a Flask web container, a PostgreSQL 16 database, a persistent `app-data` volume for encrypted uploads and exports, and a persistent `postgres-data` volume for the database.
 
+The Flask entrypoint is `wsgi.py`, and the container starts Gunicorn with `wsgi:app`.
+
 ## Railway deployment
 
 1. Create a Railway project from this repository.
@@ -71,6 +73,8 @@ This is required because encrypted attachments, generated PDFs, and filesystem-b
 
 ## PostgreSQL notes
 
+- The app requires `DATABASE_URL` at startup. There is no SQLite fallback.
+- `DATABASE_URL` must point to PostgreSQL or the app raises a startup error immediately.
 - The app reads `DATABASE_URL` from Railway or Docker Compose.
 - Railway may provide the value as `postgres://...` or `postgresql://...`.
 - The config normalizes either form to `postgresql+psycopg://...` automatically for SQLAlchemy.
