@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from datetime import timedelta
 from pathlib import Path
+from urllib.parse import quote
 
 from dotenv import load_dotenv
 
@@ -12,16 +13,63 @@ load_dotenv(BASE_DIR / ".env")
 
 DEFAULT_STORAGE_ROOT = Path(os.getenv("APP_STORAGE_ROOT", BASE_DIR / "runtime"))
 
+DATABASE_URL_ENV_NAMES = (
+    "DATABASE_URL",
+    "DATABASE_PRIVATE_URL",
+    "DATABASE_PUBLIC_URL",
+    "POSTGRES_URL",
+    "POSTGRESQL_URL",
+)
+
+PG_ENV_ALIASES = {
+    "host": ("PGHOST", "POSTGRES_HOST", "DATABASE_HOST"),
+    "port": ("PGPORT", "POSTGRES_PORT", "DATABASE_PORT"),
+    "user": ("PGUSER", "POSTGRES_USER", "DATABASE_USER"),
+    "password": ("PGPASSWORD", "POSTGRES_PASSWORD", "DATABASE_PASSWORD"),
+    "database": ("PGDATABASE", "POSTGRES_DB", "POSTGRES_DATABASE", "DATABASE_NAME"),
+}
+
+
+def _first_env_value(*names: str) -> str:
+    for name in names:
+        value = os.getenv(name, "").strip()
+        if value:
+            return value
+    return ""
+
+
+def _database_url_from_pg_vars() -> str:
+    host = _first_env_value(*PG_ENV_ALIASES["host"])
+    user = _first_env_value(*PG_ENV_ALIASES["user"])
+    password = _first_env_value(*PG_ENV_ALIASES["password"])
+    database = _first_env_value(*PG_ENV_ALIASES["database"])
+    port = _first_env_value(*PG_ENV_ALIASES["port"]) or "5432"
+
+    if not all([host, user, password, database]):
+        return ""
+
+    encoded_user = quote(user, safe="")
+    encoded_password = quote(password, safe="")
+    encoded_database = quote(database, safe="")
+    return f"postgresql+psycopg://{encoded_user}:{encoded_password}@{host}:{port}/{encoded_database}"
+
 
 def require_database_url() -> str:
-    raw_url = os.getenv("DATABASE_URL", "").strip()
-    if not raw_url:
-        raise RuntimeError(
-            "DATABASE_URL must be set to a PostgreSQL connection string. "
-            "For local Docker runs, use docker compose up --build. "
-            "On Railway, attach a PostgreSQL service to the web service."
-        )
-    return raw_url
+    raw_url = _first_env_value(*DATABASE_URL_ENV_NAMES) or _database_url_from_pg_vars()
+    if raw_url:
+        return raw_url
+
+    accepted_url_vars = ", ".join(DATABASE_URL_ENV_NAMES)
+    accepted_pg_vars = ", ".join(
+        " / ".join(names)
+        for names in PG_ENV_ALIASES.values()
+    )
+    raise RuntimeError(
+        "PostgreSQL configuration is missing. Set one full connection URL "
+        f"({accepted_url_vars}) or provide PG-style fields ({accepted_pg_vars}). "
+        "On Railway, add a reference variable on the web service such as "
+        "DATABASE_URL=${{Postgres.DATABASE_URL}}, then redeploy."
+    )
 
 
 def normalize_database_url(raw_url: str) -> str:
@@ -35,7 +83,7 @@ def normalize_database_url(raw_url: str) -> str:
 def postgres_database_url() -> str:
     database_url = normalize_database_url(require_database_url())
     if not database_url.startswith(("postgresql+psycopg://", "postgresql://", "postgres://")):
-        raise RuntimeError("DATABASE_URL must point to a PostgreSQL database.")
+        raise RuntimeError("The configured database URL must point to PostgreSQL.")
     return database_url
 
 

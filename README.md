@@ -57,10 +57,11 @@ FLASK_ENV=production
 SECRET_KEY=<long-random-secret>
 APP_ENCRYPTION_KEY=<second-long-random-secret>
 APP_STORAGE_ROOT=/app/runtime
+DATABASE_URL=${{Postgres.DATABASE_URL}}
 WEB_CONCURRENCY=1
 ```
 
-Railway should provide `DATABASE_URL` when the PostgreSQL service is connected to the web service. If it is not present on the web service, add the database reference variable before deploying.
+If your Railway database service is not named `Postgres`, replace `Postgres` in the reference with the actual service name. Railway's Postgres service exposes `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and `DATABASE_URL`; this app accepts either the full URL or those PG-style fields.
 
 4. Attach a Railway volume mounted at `/app/runtime`.
 
@@ -72,9 +73,9 @@ This is required because encrypted attachments, generated PDFs, and filesystem-b
 
 ## PostgreSQL notes
 
-- The app requires `DATABASE_URL` at startup. There is no SQLite fallback.
-- `DATABASE_URL` must point to PostgreSQL or the app raises a startup error immediately.
-- The app reads `DATABASE_URL` from Railway or Docker Compose.
+- The app requires PostgreSQL at startup. There is no SQLite fallback.
+- Prefer `DATABASE_URL=${{Postgres.DATABASE_URL}}` on Railway.
+- The app also accepts `DATABASE_PRIVATE_URL`, `DATABASE_PUBLIC_URL`, `POSTGRES_URL`, `POSTGRESQL_URL`, or PG-style fields such as `PGHOST` plus `PGUSER`.
 - Railway may provide the value as `postgres://...` or `postgresql://...`.
 - The config normalizes either form to `postgresql+psycopg://...` automatically for SQLAlchemy.
 
