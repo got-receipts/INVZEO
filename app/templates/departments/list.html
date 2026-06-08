@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Agency Directory</p>
+    <h1>Departments</h1>
+  </div>
+  <a class="primary-button link-button" href="{{ url_for('departments.new_department') }}">Add Department</a>
+</section>
+<section class="list-stack">
+  {% for department in departments %}
+  <article class="record-card static-card">
+    <div>
+      <p class="eyebrow">{{ department.county }} County</p>
+      <h2>{{ department.name }}</h2>
+      <p class="empty-copy">{{ department.address }}</p>
+    </div>
+    <div class="record-meta align-end">
+      <span>{{ department.phone }}</span>
+      <span>{{ department.email }}</span>
+      <span>{{ department.agency_contact }}</span>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

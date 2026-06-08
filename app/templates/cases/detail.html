@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">{{ case.case_number }}</p>
+    <h1>{{ case.case_type }}</h1>
+    <p class="lede">{{ case.incident_location }}</p>
+  </div>
+  <div class="record-meta">
+    <span class="pill">{{ case.status }}</span>
+    <span class="pill priority-{{ case.priority|lower }}">{{ case.priority }}</span>
+  </div>
+</section>
+
+<section class="detail-grid">
+  <article class="panel">
+    <h2>Case Summary</h2>
+    <dl class="detail-list">
+      <div><dt>Created</dt><dd>{{ case.created_at.strftime('%Y-%m-%d %H:%M UTC') }}</dd></div>
+      <div><dt>User Name</dt><dd>{{ case.user_name }}</dd></div>
+      <div><dt>Department Involved</dt><dd>{{ case.primary_department.name }}</dd></div>
+      <div><dt>Officer Contact</dt><dd>{{ case.officer_contact }}</dd></div>
+      <div><dt>Associated Agencies</dt><dd>{{ case.departments|map(attribute='name')|join(', ') }}</dd></div>
+    </dl>
+    <h3>Narrative</h3>
+    <p class="narrative-block">{{ case.narrative }}</p>
+  </article>
+
+  <article class="panel">
+    <h2>Attachments</h2>
+    <form class="stack-form compact-form" method="post" enctype="multipart/form-data" action="{{ url_for('cases.upload_attachment', case_id=case.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="file" name="attachments" multiple>
+      <button class="primary-button" type="submit">Upload Files</button>
+    </form>
+    <div class="list-stack">
+      {% for attachment in case.attachments %}
+      <a class="record-card" href="{{ url_for('cases.download_attachment', case_id=case.id, attachment_id=attachment.id) }}">
+        <div>
+          <h3>{{ attachment.original_filename }}</h3>
+          <p class="empty-copy">{{ attachment.mime_type }} · {{ attachment.file_size }} bytes</p>
+        </div>
+        <span class="pill">Download</span>
+      </a>
+      {% else %}
+      <p class="empty-copy">No attachments uploaded.</p>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="panel">
+    <h2>Notes</h2>
+    <form class="stack-form compact-form" method="post">
+      {{ note_form.hidden_tag() }}
+      {{ note_form.body(rows=4, placeholder="Add an operational note") }}
+      {{ note_form.submit(class_="primary-button") }}
+    </form>
+    <div class="timeline">
+      {% for note in case.notes|sort(attribute='created_at', reverse=True) %}
+      <article class="timeline-item">
+        <strong>{{ note.author.full_name }}</strong>
+        <span>{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+        <p class="empty-copy">{{ note.body }}</p>
+      </article>
+      {% else %}
+      <p class="empty-copy">No notes recorded.</p>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="panel">
+    <h2>Activity History</h2>
+    <div class="timeline">
+      {% for item in case.activities|sort(attribute='created_at', reverse=True) %}
+      <article class="timeline-item">
+        <strong>{{ item.action }}</strong>
+        <span>{{ item.actor_name }} · {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+        <p class="empty-copy">{{ item.details }}</p>
+      </article>
+      {% else %}
+      <p class="empty-copy">No activity recorded.</p>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="panel panel-wide">
+    <h2>Generate Report</h2>
+    <form class="stack-form compact-form" method="post" action="{{ url_for('cases.generate_case_report', case_id=case.id) }}">
+      {{ report_form.hidden_tag() }}
+      <label><span>{{ report_form.title.label.text }}</span>{{ report_form.title(value='Case Summary ' ~ case.case_number) }}</label>
+      <label><span>{{ report_form.summary.label.text }}</span>{{ report_form.summary(rows=5) }}</label>
+      {{ report_form.submit(class_="primary-button") }}
+    </form>
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Account Controls</p>
+    <h1>Settings</h1>
+  </div>
+</section>
+<section class="panel">
+  <form class="stack-form" method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-grid">
+      <label><span>{{ form.full_name.label.text }}</span>{{ form.full_name() }}</label>
+      <label><span>{{ form.email.label.text }}</span>{{ form.email() }}</label>
+      <label><span>{{ form.current_password.label.text }}</span>{{ form.current_password() }}</label>
+      <label><span>{{ form.new_password.label.text }}</span>{{ form.new_password() }}</label>
+      <label><span>{{ form.confirm_password.label.text }}</span>{{ form.confirm_password() }}</label>
+    </div>
+    {{ form.submit(class_="primary-button") }}
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Directory Management</p>
+    <h1>Add Department</h1>
+  </div>
+</section>
+<section class="panel">
+  <form class="stack-form" method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-grid">
+      <label><span>{{ form.name.label.text }}</span>{{ form.name() }}</label>
+      <label><span>{{ form.county.label.text }}</span>{{ form.county() }}</label>
+      <label><span>{{ form.address.label.text }}</span>{{ form.address() }}</label>
+      <label><span>{{ form.phone.label.text }}</span>{{ form.phone() }}</label>
+      <label><span>{{ form.email.label.text }}</span>{{ form.email() }}</label>
+      <label><span>{{ form.agency_contact.label.text }}</span>{{ form.agency_contact() }}</label>
+    </div>
+    <label><span>{{ form.notes.label.text }}</span>{{ form.notes(rows=5) }}</label>
+    {{ form.submit(class_="primary-button") }}
+  </form>
+</section>
+{% endblock %}

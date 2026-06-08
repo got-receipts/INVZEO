@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Lawful Public Data</p>
+    <h1>Public Data Sources</h1>
+    <p class="lede">Only official APIs, open portals, and lawfully accessible public datasets are listed here.</p>
+  </div>
+</section>
+<section class="list-stack">
+  {% for source in sources %}
+  <article class="record-card static-card">
+    <div>
+      <p class="eyebrow">{{ source.record_type }}</p>
+      <h2>{{ source.name }}</h2>
+      <p class="empty-copy">{{ source.notes }}</p>
+    </div>
+    <div class="record-meta align-end">
+      <span>{{ source.agency }}</span>
+      <span>{{ source.county }}</span>
+      {% if source.requires_auth or source.requires_payment %}
+      <span class="warning-copy">Official site only. Additional verification or payment may be required.</span>
+      {% endif %}
+      <a class="ghost-button link-button" href="{{ source.search_url }}" target="_blank" rel="noreferrer">Open Official Source</a>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

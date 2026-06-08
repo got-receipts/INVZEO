@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Case Management</p>
+    <h1>My Cases</h1>
+  </div>
+  <a class="primary-button link-button" href="{{ url_for('cases.new_case') }}">Open New Case</a>
+</section>
+
+<section class="list-stack">
+  {% for case in cases %}
+  <a class="record-card" href="{{ url_for('cases.case_detail', case_id=case.id) }}">
+    <div>
+      <p class="eyebrow">{{ case.case_number }}</p>
+      <h2>{{ case.case_type }}</h2>
+      <p class="empty-copy">{{ case.incident_location }}</p>
+    </div>
+    <div class="record-meta align-end">
+      <span class="pill">{{ case.status }}</span>
+      <span class="pill priority-{{ case.priority|lower }}">{{ case.priority }}</span>
+      <span>{{ case.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+    </div>
+  </a>
+  {% else %}
+  <article class="panel empty-state">
+    <h2>No cases yet</h2>
+    <p class="empty-copy">Create the first intake to start tracking a confidential informant workflow.</p>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

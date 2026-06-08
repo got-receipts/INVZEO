@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">New Intake</p>
+    <h1>Open New Case</h1>
+  </div>
+</section>
+
+<section class="panel">
+  <form class="stack-form" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-grid">
+      <label><span>{{ form.user_name.label.text }}</span>{{ form.user_name() }}</label>
+      <label><span>{{ form.primary_department_id.label.text }}</span>{{ form.primary_department_id() }}</label>
+      <label><span>{{ form.department_ids.label.text }}</span>{{ form.department_ids(size=5) }}</label>
+      <label><span>{{ form.officer_contact.label.text }}</span>{{ form.officer_contact() }}</label>
+      <label><span>{{ form.case_type.label.text }}</span>{{ form.case_type() }}</label>
+      <label><span>{{ form.incident_location.label.text }}</span>{{ form.incident_location() }}</label>
+      <label><span>{{ form.status.label.text }}</span>{{ form.status() }}</label>
+      <label><span>{{ form.priority.label.text }}</span>{{ form.priority() }}</label>
+    </div>
+    <label><span>{{ form.narrative.label.text }}</span>{{ form.narrative(rows=8) }}</label>
+    <label>
+      <span>Attachments</span>
+      <input type="file" name="attachments" multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.mp3,.wav,.m4a,.txt">
+    </label>
+    {{ form.submit(class_="primary-button") }}
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/ci_help_desk
+      APP_STORAGE_ROOT: /app/runtime
+      FLASK_ENV: development
+      PORT: 8080
+    depends_on:
+      - db
+    volumes:
+      - app-data:/app/runtime
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ci_help_desk
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  app-data:
+  postgres-data:

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ report.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  </head>
+  <body class="print-view" onload="window.print()">
+    <article class="panel print-sheet">
+      <h1>{{ report.title }}</h1>
+      <p><strong>Case Number:</strong> {{ report.case.case_number }}</p>
+      <p><strong>Created:</strong> {{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+      <p><strong>Case Summary:</strong> {{ report.summary }}</p>
+      <p><strong>Incident Details:</strong> {{ report.case.case_type }} at {{ report.case.incident_location }}</p>
+      <p><strong>Timeline:</strong></p>
+      <ul>
+        {% for item in report.case.activities|sort(attribute='created_at') %}
+        <li>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }} - {{ item.action }} - {{ item.details }}</li>
+        {% endfor %}
+      </ul>
+    </article>
+  </body>
+</html>

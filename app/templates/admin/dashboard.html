@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Administration</p>
+    <h1>Admin Panel</h1>
+  </div>
+</section>
+
+<section class="detail-grid">
+  <article class="panel">
+    <h2>Create User</h2>
+    <form class="stack-form" method="post">
+      {{ form.hidden_tag() }}
+      <div class="form-grid">
+        <label><span>{{ form.full_name.label.text }}</span>{{ form.full_name() }}</label>
+        <label><span>{{ form.username.label.text }}</span>{{ form.username() }}</label>
+        <label><span>{{ form.email.label.text }}</span>{{ form.email() }}</label>
+        <label><span>{{ form.role.label.text }}</span>{{ form.role() }}</label>
+        <label><span>{{ form.department_id.label.text }}</span>{{ form.department_id() }}</label>
+        <label><span>{{ form.password.label.text }}</span>{{ form.password() }}</label>
+      </div>
+      {{ form.submit(class_="primary-button") }}
+    </form>
+  </article>
+
+  <article class="panel">
+    <h2>Users</h2>
+    <div class="list-stack">
+      {% for user in users %}
+      <article class="record-card static-card">
+        <div>
+          <h3>{{ user.full_name }}</h3>
+          <p class="empty-copy">{{ user.email }}</p>
+        </div>
+        <div class="record-meta align-end">
+          <span class="pill">{{ user.role.title() }}</span>
+          <span>{{ user.department.name if user.department else 'No department' }}</span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="panel panel-wide">
+    <h2>Recent Audit Logs</h2>
+    <div class="timeline">
+      {% for log in audit_logs %}
+      <article class="timeline-item">
+        <strong>{{ log.action }}</strong>
+        <span>{{ log.created_at.strftime('%Y-%m-%d %H:%M') }} · {{ log.user.full_name if log.user else 'System' }}</span>
+        <p class="empty-copy">{{ log.details }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+{% endblock %}

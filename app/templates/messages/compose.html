@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Secure Messaging</p>
+    <h1>Compose Message</h1>
+  </div>
+</section>
+<section class="panel">
+  <form class="stack-form" method="post">
+    {{ form.hidden_tag() }}
+    <label><span>{{ form.recipient_id.label.text }}</span>{{ form.recipient_id() }}</label>
+    <label><span>{{ form.subject.label.text }}</span>{{ form.subject() }}</label>
+    <label><span>{{ form.body.label.text }}</span>{{ form.body(rows=7) }}</label>
+    {{ form.submit(class_="primary-button") }}
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel narrow">
+  <p class="eyebrow">Secure Access</p>
+  <h1>Sign in</h1>
+  <p class="lede">Only authorized users can access confidential case content, attachments, and reporting tools.</p>
+  <form class="stack-form" method="post">
+    {{ form.hidden_tag() }}
+    <label>
+      <span>{{ form.email.label.text }}</span>
+      {{ form.email(placeholder="name@agency.gov") }}
+    </label>
+    <label>
+      <span>{{ form.password.label.text }}</span>
+      {{ form.password(placeholder="Password") }}
+    </label>
+    <label class="inline-check">
+      {{ form.remember() }}
+      <span>{{ form.remember.label.text }}</span>
+    </label>
+    {{ form.submit(class_="primary-button") }}
+  </form>
+</section>
+{% endblock %}

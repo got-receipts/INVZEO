@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">CAD Style Reporting</p>
+    <h1>Reports</h1>
+  </div>
+</section>
+<section class="list-stack">
+  {% for report in reports %}
+  <a class="record-card" href="{{ url_for('reports.report_detail', report_id=report.id) }}">
+    <div>
+      <p class="eyebrow">{{ report.case.case_number }}</p>
+      <h2>{{ report.title }}</h2>
+      <p class="empty-copy">{{ report.summary[:120] }}{% if report.summary|length > 120 %}...{% endif %}</p>
+    </div>
+    <span class="pill">Open</span>
+  </a>
+  {% else %}
+  <article class="panel empty-state">
+    <h2>No reports yet</h2>
+    <p class="empty-copy">Generate a report from a case detail view.</p>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

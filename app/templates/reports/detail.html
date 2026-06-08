@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Report</p>
+    <h1>{{ report.title }}</h1>
+    <p class="lede">{{ report.case.case_number }} · {{ report.case.primary_department.name }}</p>
+  </div>
+  <div class="button-row">
+    <a class="primary-button link-button" href="{{ url_for('reports.download_report', report_id=report.id) }}">Download PDF</a>
+    <a class="ghost-button link-button" href="{{ url_for('reports.print_report', report_id=report.id) }}">Print View</a>
+  </div>
+</section>
+<section class="panel">
+  <h2>Case Summary</h2>
+  <p class="narrative-block">{{ report.summary }}</p>
+  <dl class="detail-list">
+    <div><dt>Incident Details</dt><dd>{{ report.case.case_type }} at {{ report.case.incident_location }}</dd></div>
+    <div><dt>Timeline</dt><dd>{{ report.case.activities|length }} activity events</dd></div>
+    <div><dt>Attached Departments</dt><dd>{{ report.case.departments|map(attribute='name')|join(', ') }}</dd></div>
+    <div><dt>Officer Contact</dt><dd>{{ report.case.officer_contact }}</dd></div>
+    <div><dt>User Notes</dt><dd>{{ report.case.notes|length }} note entries</dd></div>
+  </dl>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{
+  "name": "Confidential Informant Help Desk",
+  "short_name": "CI Help Desk",
+  "description": "Secure case management and lawful public data workflows for mobile-first field use.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0e1626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

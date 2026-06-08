@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-card">
+  <p class="eyebrow">Operational Dashboard</p>
+  <h1>Confidential Informant Help Desk</h1>
+  <p class="lede">Secure case intake, encrypted evidence handling, lawful public data lookup, and report generation optimized for iPhone home screen installation.</p>
+  <div class="hero-meta">
+    <span class="pill">Role: {{ current_user.role.title() }}</span>
+    <span class="pill">User: {{ current_user.full_name }}</span>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  {% for card in dashboard_cards %}
+  <a class="app-card" href="{{ card.endpoint }}">
+    <strong>{{ card.title }}</strong>
+    <small>Open</small>
+  </a>
+  {% endfor %}
+</section>
+
+<section class="stats-grid">
+  <article class="panel">
+    <p class="eyebrow">Legal Boundaries</p>
+    <h2>Official public sources only</h2>
+    <p class="lede">Search tools use open data portals and official agency links only. Paywalled, authenticated, or CAPTCHA-protected systems are never bypassed.</p>
+  </article>
+  <article class="panel">
+    <p class="eyebrow">Security Posture</p>
+    <h2>Encrypted evidence and audit trails</h2>
+    <p class="lede">Attachments are encrypted at rest, access is role-controlled, and sensitive actions are written to the audit log.</p>
+  </article>
+</section>
+{% endblock %}

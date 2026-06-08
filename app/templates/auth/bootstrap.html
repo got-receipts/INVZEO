@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel narrow">
+  <p class="eyebrow">First Run</p>
+  <h1>Create the initial administrator</h1>
+  <p class="lede">This one-time step secures the application before any case data is entered.</p>
+  <form class="stack-form" method="post">
+    {{ form.hidden_tag() }}
+    <label><span>{{ form.full_name.label.text }}</span>{{ form.full_name() }}</label>
+    <label><span>{{ form.username.label.text }}</span>{{ form.username() }}</label>
+    <label><span>{{ form.email.label.text }}</span>{{ form.email() }}</label>
+    <label><span>{{ form.password.label.text }}</span>{{ form.password() }}</label>
+    <label><span>{{ form.confirm_password.label.text }}</span>{{ form.confirm_password() }}</label>
+    <label><span>{{ form.department_id.label.text }}</span>{{ form.department_id() }}</label>
+    {{ form.submit(class_="primary-button") }}
+  </form>
+</section>
+{% endblock %}

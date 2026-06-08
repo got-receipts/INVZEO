@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Official Public Records</p>
+    <h1>Public Records Search</h1>
+    <p class="lede">Search official public-source references only. Restricted systems stay behind their own official access controls.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <form class="stack-form" method="get">
+    <div class="form-grid">
+      <label><span>Name</span><input type="text" name="name" value="{{ filters.name }}"></label>
+      <label><span>Address</span><input type="text" name="address" value="{{ filters.address }}"></label>
+      <label><span>County</span><input type="text" name="county" value="{{ filters.county }}"></label>
+      <label><span>Agency</span><input type="text" name="agency" value="{{ filters.agency }}"></label>
+      <label><span>Case Reference</span><input type="text" name="case_reference" value="{{ filters.case_reference }}"></label>
+      <label><span>Public Record Type</span><input type="text" name="record_type" value="{{ filters.record_type }}"></label>
+    </div>
+    <button class="primary-button" type="submit">Search Official Sources</button>
+  </form>
+</section>
+
+<section class="list-stack">
+  {% for source in results %}
+  <article class="record-card static-card">
+    <div>
+      <p class="eyebrow">{{ source.record_type }}</p>
+      <h2>{{ source.name }}</h2>
+      <p class="empty-copy">{{ source.notes }}</p>
+    </div>
+    <div class="record-meta align-end">
+      <span>{{ source.agency }}</span>
+      <span>{{ source.county }}</span>
+      {% if source.requires_auth or source.requires_payment %}
+      <span class="warning-copy">This source may require official login, payment, or manual verification on the source site.</span>
+      {% endif %}
+      <a class="ghost-button link-button" href="{{ source.search_url }}" target="_blank" rel="noreferrer">Go to Official Link</a>
+    </div>
+  </article>
+  {% else %}
+  <article class="panel empty-state">
+    <h2>No sources matched</h2>
+    <p class="empty-copy">Adjust the filters or browse the Public Data directory.</p>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

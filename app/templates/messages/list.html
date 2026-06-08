@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Secure Messaging</p>
+    <h1>Inbox</h1>
+  </div>
+  <a class="primary-button link-button" href="{{ url_for('messages.compose') }}">Compose</a>
+</section>
+<section class="list-stack">
+  {% for message in messages %}
+  <a class="record-card" href="{{ url_for('messages.detail', message_id=message.id) }}">
+    <div>
+      <p class="eyebrow">From {{ message.sender.full_name }}</p>
+      <h2>{{ message.subject }}</h2>
+      <p class="empty-copy">{{ message.body[:140] }}{% if message.body|length > 140 %}...{% endif %}</p>
+    </div>
+    <div class="record-meta align-end">
+      {% if not message.is_read %}<span class="pill">Unread</span>{% endif %}
+      <span>{{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+    </div>
+  </a>
+  {% else %}
+  <article class="panel empty-state">
+    <h2>No messages</h2>
+    <p class="empty-copy">Your secure inbox is empty.</p>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}
