@@ -1,6 +1,6 @@
-# Confidential Informant Help Desk
+# INVZEO Investigations
 
-Confidential Informant Help Desk is a Flask Progressive Web App built for Docker deployment, Railway hosting, and a PostgreSQL database. It includes mobile-first case intake, encrypted evidence uploads, department coordination, secure messaging, CAD-style reporting, and lawful public-data reference tools.
+INVZEO Investigations is a Flask Progressive Web App built for Docker deployment, Railway hosting, and a PostgreSQL database. It includes mobile-first case intake, encrypted evidence uploads, department coordination, secure messaging, CAD-style reporting, and lawful public-data reference tools.
 
 ## Deployment assumptions
 
@@ -12,7 +12,7 @@ Confidential Informant Help Desk is a Flask Progressive Web App built for Docker
 
 ## Core capabilities
 
-- Mobile-first dashboard with large app-style navigation for iPhone home screen installation
+- Mobile-first app shell with iPhone safe-area support and home screen installation
 - Role-based authentication for admin, officer, analyst, and informant users
 - Case management with notes, activity history, encrypted attachments, and department associations
 - Department directory seeded with Capital District agencies
@@ -28,25 +28,21 @@ Confidential Informant Help Desk is a Flask Progressive Web App built for Docker
 
 ## Docker local development
 
-1. Copy the environment template.
-
-```powershell
-Copy-Item .env.example .env
-```
-
-2. Start the app and PostgreSQL.
+1. Start the app and PostgreSQL.
 
 ```powershell
 docker compose up --build
 ```
 
-3. Open the app at http://localhost:8080.
+2. Open the app at http://localhost:8080.
 
-4. On first launch, create the bootstrap administrator at /auth/bootstrap.
+3. On first launch, create the bootstrap administrator at /auth/bootstrap.
 
-The Compose stack provides a Flask web container, a PostgreSQL 16 database, a persistent `app-data` volume for encrypted uploads and exports, and a persistent `postgres-data` volume for the database.
+The Compose stack provides a Flask web container, a PostgreSQL 16 database, a persistent `app-data` volume for encrypted uploads and exports, and a persistent `postgres-data` volume for the database. It includes a Postgres healthcheck, so the web container waits for the database before starting.
 
 The Flask entrypoint is `wsgi.py`, and the container starts Gunicorn with `wsgi:app`.
+
+Optional: copy `.env.example` to `.env` when you want to override local secrets, ports, or retry settings.
 
 ## Railway deployment
 
@@ -61,7 +57,10 @@ FLASK_ENV=production
 SECRET_KEY=<long-random-secret>
 APP_ENCRYPTION_KEY=<second-long-random-secret>
 APP_STORAGE_ROOT=/app/runtime
+WEB_CONCURRENCY=1
 ```
+
+Railway should provide `DATABASE_URL` when the PostgreSQL service is connected to the web service. If it is not present on the web service, add the database reference variable before deploying.
 
 4. Attach a Railway volume mounted at `/app/runtime`.
 
@@ -86,9 +85,9 @@ This is required because encrypted attachments, generated PDFs, and filesystem-b
 - `.dockerignore`
 - `railway.json`
 
-## PWA note
+## PWA notes
 
-The manifest, service worker, and Safari standalone metadata are already included. For production branding on iPhone, replace the placeholder SVG icon with Apple-sized PNG icons.
+The manifest, service worker, and Safari standalone metadata are included. The service worker caches static app assets only, not confidential case pages, message threads, reports, or downloads. For production branding on iPhone, add Apple-sized PNG icons alongside the included SVG icon.
 
 ## Scaling note
 

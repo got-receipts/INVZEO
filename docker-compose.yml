@@ -3,16 +3,19 @@ services:
     build:
       context: .
     ports:
-      - "8080:8080"
-    env_file:
-      - .env
+      - "${PORT:-8080}:${PORT:-8080}"
     environment:
-      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/ci_help_desk
-      APP_STORAGE_ROOT: /app/runtime
-      FLASK_ENV: development
-      PORT: 8080
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://postgres:postgres@db:5432/ci_help_desk}
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:-local-dev-encryption-key-change-before-production}
+      APP_STORAGE_ROOT: ${APP_STORAGE_ROOT:-/app/runtime}
+      DB_CONNECT_RETRIES: ${DB_CONNECT_RETRIES:-30}
+      DB_CONNECT_RETRY_SECONDS: ${DB_CONNECT_RETRY_SECONDS:-2}
+      FLASK_ENV: ${FLASK_ENV:-development}
+      PORT: ${PORT:-8080}
+      SECRET_KEY: ${SECRET_KEY:-local-dev-secret-key-change-before-production}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - app-data:/app/runtime
 
@@ -24,6 +27,11 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ci_help_desk"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
     volumes:
       - postgres-data:/var/lib/postgresql/data
 

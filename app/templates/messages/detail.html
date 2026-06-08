@@ -3,7 +3,7 @@
 <section class="panel">
   <p class="eyebrow">Secure Message</p>
   <h1>{{ message.subject }}</h1>
-  <p class="lede">From {{ message.sender.full_name }} to {{ message.recipient.full_name }} · {{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+  <p class="lede">From {{ message.sender.full_name }} to {{ message.recipient.full_name }} &middot; {{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
   <p class="narrative-block">{{ message.body }}</p>
 </section>
 {% endblock %}

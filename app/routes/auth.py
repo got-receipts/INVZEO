@@ -54,7 +54,7 @@ def bootstrap_admin():
     return render_template("auth/bootstrap.html", form=form)
 
 
-@auth_bp.get("/logout")
+@auth_bp.post("/logout")
 @login_required
 def logout():
     log_audit("logout", user=current_user, details="User signed out")

@@ -4,15 +4,23 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 
 BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
+
 DEFAULT_STORAGE_ROOT = Path(os.getenv("APP_STORAGE_ROOT", BASE_DIR / "runtime"))
 
 
 def require_database_url() -> str:
     raw_url = os.getenv("DATABASE_URL", "").strip()
     if not raw_url:
-        raise RuntimeError("DATABASE_URL must be set to a PostgreSQL connection string.")
+        raise RuntimeError(
+            "DATABASE_URL must be set to a PostgreSQL connection string. "
+            "For local Docker runs, use docker compose up --build. "
+            "On Railway, attach a PostgreSQL service to the web service."
+        )
     return raw_url
 
 
@@ -35,6 +43,10 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
     APP_ENCRYPTION_KEY = os.getenv("APP_ENCRYPTION_KEY", SECRET_KEY)
     SQLALCHEMY_DATABASE_URI = postgres_database_url()
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PREFERRED_URL_SCHEME = "https"
     SESSION_TYPE = "filesystem"
@@ -51,8 +63,10 @@ class Config:
     UPLOAD_FOLDER = str(DEFAULT_STORAGE_ROOT / "uploads")
     EXPORT_FOLDER = str(DEFAULT_STORAGE_ROOT / "exports")
     WTF_CSRF_TIME_LIMIT = None
-    APP_NAME = "Confidential Informant Help Desk"
+    APP_NAME = "INVZEO Investigations"
     PUBLIC_DATA_TIMEOUT = 10
+    DB_CONNECT_RETRIES = int(os.getenv("DB_CONNECT_RETRIES", "20"))
+    DB_CONNECT_RETRY_SECONDS = float(os.getenv("DB_CONNECT_RETRY_SECONDS", "2"))
 
 
 class DevelopmentConfig(Config):

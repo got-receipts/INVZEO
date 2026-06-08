@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CI Help Desk">
-    <meta name="theme-color" content="#0e1626">
+    <meta name="apple-mobile-web-app-title" content="INVZEO">
+    <meta name="theme-color" content="#f5f7fb">
     <meta name="description" content="Secure case management and lawful public data workflows optimized for mobile field use.">
     <title>{{ config.APP_NAME }}</title>
     <link rel="manifest" href="{{ url_for('main.manifest') }}">
@@ -14,15 +14,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   </head>
   <body data-theme="system">
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
     <header class="topbar">
-      <div>
-        <p class="eyebrow">Secure Operations</p>
-        <a class="brand" href="{{ url_for('main.dashboard') if current_user.is_authenticated else url_for('auth.login') }}">CI Help Desk</a>
+      <div class="brand-lockup">
+        <a class="brand" href="{{ url_for('main.dashboard') if current_user.is_authenticated else url_for('auth.login') }}">INVZEO</a>
+        <span>Investigations</span>
       </div>
       <div class="topbar-actions">
-        <button class="ghost-button" type="button" data-theme-toggle>Theme</button>
+        <button class="ghost-button icon-button" type="button" data-theme-toggle aria-label="Change theme">Theme</button>
         {% if current_user.is_authenticated %}
         <a class="ghost-button link-button" href="{{ url_for('messages.inbox') }}">Inbox</a>
         <form action="{{ url_for('auth.logout') }}" method="post">
@@ -34,13 +32,12 @@
     </header>
 
     {% if current_user.is_authenticated %}
-    <nav class="tabbar">
-      <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
-      <a href="{{ url_for('cases.list_cases') }}">Cases</a>
-      <a href="{{ url_for('departments.list_departments') }}">Departments</a>
-      <a href="{{ url_for('reports.list_reports') }}">Reports</a>
-      <a href="{{ url_for('public.data_sources') }}">Public Data</a>
-      <a href="{{ url_for('settings.index') }}">Settings</a>
+    <nav class="tabbar" aria-label="Primary">
+      <a class="{{ 'is-active' if request.endpoint == 'main.dashboard' else '' }}" href="{{ url_for('main.dashboard') }}">Home</a>
+      <a class="{{ 'is-active' if request.blueprint == 'cases' else '' }}" href="{{ url_for('cases.list_cases') }}">Cases</a>
+      <a class="{{ 'is-active' if request.blueprint == 'messages' else '' }}" href="{{ url_for('messages.inbox') }}">Inbox</a>
+      <a class="{{ 'is-active' if request.blueprint == 'reports' else '' }}" href="{{ url_for('reports.list_reports') }}">Reports</a>
+      <a class="{{ 'is-active' if request.blueprint in ['public', 'departments', 'settings', 'admin'] else '' }}" href="{{ url_for('settings.index') }}">More</a>
     </nav>
     {% endif %}
 
@@ -57,8 +54,8 @@
 
       <section class="install-banner" data-install-banner hidden>
         <div>
-          <p class="eyebrow">Install on iPhone</p>
-          <p>Use Safari, tap Share, then Add to Home Screen for the full-screen PWA experience.</p>
+          <p class="eyebrow">Home Screen Ready</p>
+          <p>Install from Safari for the full-screen field app.</p>
         </div>
         <button class="ghost-button" type="button" data-dismiss-install>Hide</button>
       </section>

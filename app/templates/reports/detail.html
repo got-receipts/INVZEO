@@ -4,7 +4,7 @@
   <div>
     <p class="eyebrow">Report</p>
     <h1>{{ report.title }}</h1>
-    <p class="lede">{{ report.case.case_number }} · {{ report.case.primary_department.name }}</p>
+    <p class="lede">{{ report.case.case_number }} &middot; {{ report.case.primary_department.name }}</p>
   </div>
   <div class="button-row">
     <a class="primary-button link-button" href="{{ url_for('reports.download_report', report_id=report.id) }}">Download PDF</a>

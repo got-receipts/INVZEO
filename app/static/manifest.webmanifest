@@ -1,11 +1,11 @@
 {
-  "name": "Confidential Informant Help Desk",
-  "short_name": "CI Help Desk",
-  "description": "Secure case management and lawful public data workflows for mobile-first field use.",
+  "name": "INVZEO Investigations",
+  "short_name": "INVZEO",
+  "description": "Secure investigation case management for mobile-first field use.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#0e1626",
+  "background_color": "#f5f7fb",
+  "theme_color": "#f5f7fb",
   "orientation": "portrait-primary",
   "icons": [
     {

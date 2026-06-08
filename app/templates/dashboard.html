@@ -1,34 +1,77 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="hero-card">
-  <p class="eyebrow">Operational Dashboard</p>
-  <h1>Confidential Informant Help Desk</h1>
-  <p class="lede">Secure case intake, encrypted evidence handling, lawful public data lookup, and report generation optimized for iPhone home screen installation.</p>
-  <div class="hero-meta">
-    <span class="pill">Role: {{ current_user.role.title() }}</span>
-    <span class="pill">User: {{ current_user.full_name }}</span>
+<section class="dashboard-hero">
+  <div>
+    <p class="eyebrow">Operations</p>
+    <h1>Field Desk</h1>
+    <p class="lede">{{ current_user.full_name }} &middot; {{ current_user.role.title() }}</p>
   </div>
+  <a class="primary-button link-button" href="{{ url_for('cases.new_case') }}">New Case</a>
 </section>
 
-<section class="dashboard-grid">
-  {% for card in dashboard_cards %}
-  <a class="app-card" href="{{ card.endpoint }}">
-    <strong>{{ card.title }}</strong>
-    <small>Open</small>
-  </a>
+<section class="metrics-grid" aria-label="Case metrics">
+  {% for item in stats %}
+  <article class="metric-card">
+    <span>{{ item.label }}</span>
+    <strong>{{ item.value }}</strong>
+  </article>
   {% endfor %}
+</section>
+
+<section class="action-panel">
+  <div class="section-title-row">
+    <div>
+      <p class="eyebrow">Actions</p>
+      <h2>Command Center</h2>
+    </div>
+  </div>
+  <div class="dashboard-grid">
+    {% for card in dashboard_cards %}
+    <a class="app-card" href="{{ card.endpoint }}">
+      <span class="app-card-icon">{{ card.title[:1] }}</span>
+      <strong>{{ card.title }}</strong>
+    </a>
+    {% endfor %}
+  </div>
 </section>
 
 <section class="stats-grid">
   <article class="panel">
-    <p class="eyebrow">Legal Boundaries</p>
-    <h2>Official public sources only</h2>
-    <p class="lede">Search tools use open data portals and official agency links only. Paywalled, authenticated, or CAPTCHA-protected systems are never bypassed.</p>
+    <div class="section-title-row">
+      <div>
+        <p class="eyebrow">Recent</p>
+        <h2>Case Activity</h2>
+      </div>
+      <a class="ghost-button link-button" href="{{ url_for('cases.list_cases') }}">View All</a>
+    </div>
+    <div class="recent-list">
+      {% for case in recent_cases %}
+      <a class="recent-item" href="{{ url_for('cases.case_detail', case_id=case.id) }}">
+        <span>
+          <strong>{{ case.case_number }}</strong>
+          <small>{{ case.case_type }}</small>
+        </span>
+        <span class="pill priority-{{ case.priority|lower }}">{{ case.priority }}</span>
+      </a>
+      {% else %}
+      <p class="empty-copy">No case activity yet.</p>
+      {% endfor %}
+    </div>
   </article>
   <article class="panel">
-    <p class="eyebrow">Security Posture</p>
-    <h2>Encrypted evidence and audit trails</h2>
-    <p class="lede">Attachments are encrypted at rest, access is role-controlled, and sensitive actions are written to the audit log.</p>
+    <div class="section-title-row">
+      <div>
+        <p class="eyebrow">System</p>
+        <h2>Desk Status</h2>
+      </div>
+      <span class="status-dot">Live</span>
+    </div>
+    <dl class="detail-list compact-list">
+      <div><dt>Database</dt><dd>Online</dd></div>
+      <div><dt>Session</dt><dd>Protected</dd></div>
+      <div><dt>Evidence</dt><dd>Encrypted</dd></div>
+      <div><dt>Inbox</dt><dd>{{ unread_count }} unread</dd></div>
+    </dl>
   </article>
 </section>
 {% endblock %}

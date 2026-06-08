@@ -38,7 +38,7 @@
       <a class="record-card" href="{{ url_for('cases.download_attachment', case_id=case.id, attachment_id=attachment.id) }}">
         <div>
           <h3>{{ attachment.original_filename }}</h3>
-          <p class="empty-copy">{{ attachment.mime_type }} · {{ attachment.file_size }} bytes</p>
+          <p class="empty-copy">{{ attachment.mime_type }} &middot; {{ attachment.file_size }} bytes</p>
         </div>
         <span class="pill">Download</span>
       </a>
@@ -74,7 +74,7 @@
       {% for item in case.activities|sort(attribute='created_at', reverse=True) %}
       <article class="timeline-item">
         <strong>{{ item.action }}</strong>
-        <span>{{ item.actor_name }} · {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+        <span>{{ item.actor_name }} &middot; {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
         <p class="empty-copy">{{ item.details }}</p>
       </article>
       {% else %}

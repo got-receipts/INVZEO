@@ -48,7 +48,7 @@
       {% for log in audit_logs %}
       <article class="timeline-item">
         <strong>{{ log.action }}</strong>
-        <span>{{ log.created_at.strftime('%Y-%m-%d %H:%M') }} · {{ log.user.full_name if log.user else 'System' }}</span>
+        <span>{{ log.created_at.strftime('%Y-%m-%d %H:%M') }} &middot; {{ log.user.full_name if log.user else 'System' }}</span>
         <p class="empty-copy">{{ log.details }}</p>
       </article>
       {% endfor %}

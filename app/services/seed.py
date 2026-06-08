@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from sqlalchemy.dialects.postgresql import insert
+
 from app.extensions import db
 from app.models import Department, PublicDataSource
 from app.services.public_data import DEFAULT_PUBLIC_SOURCES
@@ -55,17 +57,18 @@ DEFAULT_DEPARTMENTS = [
 
 
 def seed_reference_data() -> None:
-    changed = False
-
     for department_data in DEFAULT_DEPARTMENTS:
-        if not Department.query.filter_by(name=department_data["name"]).first():
-            db.session.add(Department(**department_data))
-            changed = True
+        db.session.execute(
+            insert(Department.__table__)
+            .values(**department_data)
+            .on_conflict_do_nothing(index_elements=["name"])
+        )
 
     for source_data in DEFAULT_PUBLIC_SOURCES:
-        if not PublicDataSource.query.filter_by(name=source_data["name"]).first():
-            db.session.add(PublicDataSource(**source_data))
-            changed = True
+        db.session.execute(
+            insert(PublicDataSource.__table__)
+            .values(**source_data)
+            .on_conflict_do_nothing(index_elements=["name"])
+        )
 
-    if changed:
-        db.session.commit()
+    db.session.commit()
