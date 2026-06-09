@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import os
+
 from sqlalchemy.dialects.postgresql import insert
 
 from app.extensions import db
-from app.models import Department, PublicDataSource
+from app.models import Department, PublicDataSource, Role, User
 from app.services.public_data import DEFAULT_PUBLIC_SOURCES
 
 
@@ -65,6 +67,44 @@ DEFAULT_DEPARTMENTS = [
 ]
 
 
+def _default_admin_password() -> str:
+    password = os.getenv("DEFAULT_ADMIN_PASSWORD", "").strip()
+    if password:
+        return password
+    if os.getenv("FLASK_ENV") == "production":
+        return ""
+    return "ChangeMeNow123!"
+
+
+def seed_default_admin() -> None:
+    password = _default_admin_password()
+    if not password:
+        return
+
+    email = os.getenv("DEFAULT_ADMIN_EMAIL", "admin@invzeo.local").strip().lower()
+    username = os.getenv("DEFAULT_ADMIN_USERNAME", "admin").strip().lower()
+    full_name = os.getenv("DEFAULT_ADMIN_FULL_NAME", "INVZEO Administrator").strip()
+    department_name = os.getenv("DEFAULT_ADMIN_DEPARTMENT", "Rensselaer County Sheriffs Office").strip()
+
+    existing = User.query.filter(
+        (User.email == email) | (User.username == username)
+    ).first()
+    if existing:
+        return
+
+    department = Department.query.filter_by(name=department_name).first()
+    admin = User(
+        full_name=full_name,
+        username=username,
+        email=email,
+        role=Role.ADMIN.value,
+        department_id=department.id if department else None,
+    )
+    admin.set_password(password)
+    db.session.add(admin)
+    db.session.commit()
+
+
 def seed_reference_data() -> None:
     for department_data in DEFAULT_DEPARTMENTS:
         db.session.execute(
@@ -81,3 +121,4 @@ def seed_reference_data() -> None:
         )
 
     db.session.commit()
+    seed_default_admin()
