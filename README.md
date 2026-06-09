@@ -63,6 +63,7 @@ DEFAULT_ADMIN_EMAIL=<admin-email>
 DEFAULT_ADMIN_USERNAME=admin
 DEFAULT_ADMIN_FULL_NAME=<admin-name>
 DEFAULT_ADMIN_PASSWORD=<temporary-strong-password>
+DEFAULT_ADMIN_RESET_PASSWORD=true
 ```
 
 If your Railway database service is not named `Postgres`, replace `Postgres` in the reference with the actual service name. Railway's Postgres service exposes `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and `DATABASE_URL`; this app accepts either the full URL or those PG-style fields.
@@ -88,6 +89,8 @@ This is required because encrypted attachments, generated PDFs, and filesystem-b
 - On startup, the app creates a default admin if the configured email or username does not already exist.
 - Local development defaults to `admin@invzeo.local` / `ChangeMeNow123!`.
 - In production, set `DEFAULT_ADMIN_PASSWORD` or the default admin will not be created automatically.
+- If the admin already exists and you need to repair access, set `DEFAULT_ADMIN_RESET_PASSWORD=true`, redeploy, sign in, then set it back to `false`.
+- You can sign in with either the admin email or username.
 - Change the temporary password after first sign-in.
 
 ## External search connectors

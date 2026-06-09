@@ -21,7 +21,7 @@ PRIORITY_CHOICES = [(value, value) for value in ["Low", "Medium", "High", "Criti
 
 
 class LoginForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
+    identifier = StringField("Email or username", validators=[DataRequired(), Length(max=255)])
     password = PasswordField("Password", validators=[DataRequired()])
     remember = BooleanField("Remember this device")
     submit = SubmitField("Sign in")

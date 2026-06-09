@@ -76,6 +76,10 @@ def _default_admin_password() -> str:
     return "ChangeMeNow123!"
 
 
+def _enabled(value: str) -> bool:
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def seed_default_admin() -> None:
     password = _default_admin_password()
     if not password:
@@ -90,6 +94,18 @@ def seed_default_admin() -> None:
         (User.email == email) | (User.username == username)
     ).first()
     if existing:
+        changed = False
+        if existing.role != Role.ADMIN.value:
+            existing.role = Role.ADMIN.value
+            changed = True
+        if not existing.is_active_user:
+            existing.is_active_user = True
+            changed = True
+        if _enabled(os.getenv("DEFAULT_ADMIN_RESET_PASSWORD", "")):
+            existing.set_password(password)
+            changed = True
+        if changed:
+            db.session.commit()
         return
 
     department = Department.query.filter_by(name=department_name).first()

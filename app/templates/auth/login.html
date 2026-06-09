@@ -7,12 +7,18 @@
   <form class="stack-form" method="post">
     {{ form.hidden_tag() }}
     <label>
-      <span>{{ form.email.label.text }}</span>
-      {{ form.email(placeholder="name@agency.gov") }}
+      <span>{{ form.identifier.label.text }}</span>
+      {{ form.identifier(placeholder="admin or name@agency.gov") }}
+      {% for error in form.identifier.errors %}
+      <small class="warning-copy">{{ error }}</small>
+      {% endfor %}
     </label>
     <label>
       <span>{{ form.password.label.text }}</span>
       {{ form.password(placeholder="Password") }}
+      {% for error in form.password.errors %}
+      <small class="warning-copy">{{ error }}</small>
+      {% endfor %}
     </label>
     <label class="inline-check">
       {{ form.remember() }}

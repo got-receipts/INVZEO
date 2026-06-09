@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import or_
 
 from app.extensions import db
 from app.forms import BootstrapAdminForm, LoginForm
@@ -18,7 +19,10 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data.lower()).first()
+        identifier = form.identifier.data.strip().lower()
+        user = User.query.filter(
+            or_(User.email == identifier, User.username == identifier)
+        ).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
             log_audit("login", user=user, details="User signed in")
