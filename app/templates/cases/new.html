@@ -10,6 +10,13 @@
 <section class="panel">
   <form class="stack-form" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
+    <div class="section-title-row">
+      <div>
+        <p class="eyebrow">Case Caption</p>
+        <h2>The People Of The State Of NY</h2>
+      </div>
+      <span class="pill">Default for documents</span>
+    </div>
     <div class="form-grid">
       <label><span>{{ form.user_name.label.text }}</span>{{ form.user_name() }}</label>
       <label><span>{{ form.primary_department_id.label.text }}</span>{{ form.primary_department_id() }}</label>
@@ -20,6 +27,50 @@
       <label><span>{{ form.status.label.text }}</span>{{ form.status() }}</label>
       <label><span>{{ form.priority.label.text }}</span>{{ form.priority() }}</label>
     </div>
+
+    <div class="form-section">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Individual</p>
+          <h2>Demographics</h2>
+        </div>
+        <span class="pill">Use N/A when unavailable</span>
+      </div>
+      <div class="form-grid">
+        <label><span>{{ form.subject_full_name.label.text }}</span>{{ form.subject_full_name(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_aliases.label.text }}</span>{{ form.subject_aliases(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_dob.label.text }}</span>{{ form.subject_dob(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_age.label.text }}</span>{{ form.subject_age(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_sex.label.text }}</span>{{ form.subject_sex(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_race.label.text }}</span>{{ form.subject_race(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_ethnicity.label.text }}</span>{{ form.subject_ethnicity(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_height.label.text }}</span>{{ form.subject_height(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_weight.label.text }}</span>{{ form.subject_weight(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_hair_color.label.text }}</span>{{ form.subject_hair_color(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_eye_color.label.text }}</span>{{ form.subject_eye_color(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_address.label.text }}</span>{{ form.subject_address(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_phone.label.text }}</span>{{ form.subject_phone(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_email.label.text }}</span>{{ form.subject_email(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_license_number.label.text }}</span>{{ form.subject_license_number(placeholder="N/A") }}</label>
+        <label><span>{{ form.subject_license_state.label.text }}</span>{{ form.subject_license_state(placeholder="N/A") }}</label>
+      </div>
+      <label><span>{{ form.subject_notes.label.text }}</span>{{ form.subject_notes(rows=4, placeholder="N/A") }}</label>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Vehicle</p>
+          <h2>Plate / VIN</h2>
+        </div>
+      </div>
+      <div class="form-grid">
+        <label><span>{{ form.vehicle_plate.label.text }}</span>{{ form.vehicle_plate(placeholder="N/A") }}</label>
+        <label><span>{{ form.vehicle_state.label.text }}</span>{{ form.vehicle_state(placeholder="NY") }}</label>
+        <label><span>{{ form.vehicle_vin.label.text }}</span>{{ form.vehicle_vin(placeholder="N/A") }}</label>
+      </div>
+    </div>
+
     <label><span>{{ form.narrative.label.text }}</span>{{ form.narrative(rows=8) }}</label>
     <label>
       <span>Attachments</span>

@@ -13,6 +13,7 @@ from config import config_map
 
 from app.extensions import bcrypt, csrf, db, login_manager, migrate, server_session, talisman
 from app.routes import register_blueprints
+from app.services.schema import apply_schema_updates
 from app.services.seed import seed_reference_data
 
 
@@ -38,6 +39,7 @@ def _initialize_database(app: Flask) -> None:
                     {"lock_id": DATABASE_INIT_LOCK_ID},
                 )
                 db.create_all()
+                apply_schema_updates()
                 seed_reference_data()
                 return
             except OperationalError as exc:

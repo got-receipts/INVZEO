@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Vehicle Intelligence</p>
+    <h1>Plate / VIN Search</h1>
+    <p class="lede">VIN decoding uses public vehicle data. Plate-to-VIN requires an authorized provider connection.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <form class="stack-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <label><span>License Plate</span><input type="text" name="plate" value="{{ filters.plate }}" placeholder="N/A"></label>
+      <label><span>State</span><input type="text" name="state" value="{{ filters.state or 'NY' }}"></label>
+      <label><span>VIN</span><input type="text" name="vin" value="{{ filters.vin }}" placeholder="Decode VIN when available"></label>
+    </div>
+    <button class="primary-button" type="submit">Search Vehicle</button>
+  </form>
+</section>
+
+{% if results %}
+<section class="stats-grid">
+  <article class="panel">
+    <p class="eyebrow">Plate Lookup</p>
+    <h2>{{ results.plate.status|replace('_', ' ')|title }}</h2>
+    <p class="empty-copy">{{ results.plate.message or '' }}</p>
+    {% if results.plate.status == 'ok' %}
+    <dl class="detail-list compact-list">
+      <div><dt>Plate</dt><dd>{{ results.plate.state }} {{ results.plate.plate }}</dd></div>
+      <div><dt>VIN</dt><dd>{{ results.plate.vin }}</dd></div>
+    </dl>
+    {% endif %}
+  </article>
+
+  <article class="panel">
+    <p class="eyebrow">VIN Decode</p>
+    <h2>{{ results.vin.status|replace('_', ' ')|title }}</h2>
+    <p class="empty-copy">{{ results.vin.message or '' }}</p>
+    {% if results.vin.status == 'ok' %}
+    <dl class="detail-list compact-list">
+      <div><dt>VIN</dt><dd>{{ results.vin.vin }}</dd></div>
+      <div><dt>Year</dt><dd>{{ results.vin.year }}</dd></div>
+      <div><dt>Make</dt><dd>{{ results.vin.make }}</dd></div>
+      <div><dt>Model</dt><dd>{{ results.vin.model }}</dd></div>
+      <div><dt>Trim</dt><dd>{{ results.vin.trim }}</dd></div>
+      <div><dt>Body</dt><dd>{{ results.vin.body_class }}</dd></div>
+      <div><dt>Type</dt><dd>{{ results.vin.vehicle_type }}</dd></div>
+      <div><dt>Manufacturer</dt><dd>{{ results.vin.manufacturer }}</dd></div>
+    </dl>
+    {% endif %}
+  </article>
+</section>
+{% endif %}
+
+<section class="panel">
+  <p class="eyebrow">Official Sources</p>
+  <h2>Vehicle Records</h2>
+  <div class="button-row panel-actions">
+    <a class="ghost-button link-button" href="https://dmv.ny.gov/records" target="_blank" rel="noreferrer">NY DMV Records</a>
+    <a class="ghost-button link-button" href="https://vpic.nhtsa.dot.gov/decoder/" target="_blank" rel="noreferrer">NHTSA VIN Decoder</a>
+  </div>
+</section>
+{% endblock %}

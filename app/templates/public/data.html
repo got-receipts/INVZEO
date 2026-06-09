@@ -6,6 +6,10 @@
     <h1>Public Data Sources</h1>
     <p class="lede">Only official APIs, open portals, and lawfully accessible public datasets are listed here.</p>
   </div>
+  <div class="button-row">
+    <a class="ghost-button link-button" href="{{ url_for('public.vehicle_search') }}">Vehicle Search</a>
+    <a class="ghost-button link-button" href="{{ url_for('public.authorized_records') }}">Provider Search</a>
+  </div>
 </section>
 <section class="list-stack">
   {% for source in sources %}

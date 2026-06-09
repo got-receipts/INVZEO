@@ -79,6 +79,14 @@ This is required because encrypted attachments, generated PDFs, and filesystem-b
 - Railway may provide the value as `postgres://...` or `postgresql://...`.
 - The config normalizes either form to `postgresql+psycopg://...` automatically for SQLAlchemy.
 
+## External search connectors
+
+- VIN decoding is available through public NHTSA VIN data.
+- Plate-to-VIN requires an authorized lookup provider. Configure `PLATE_LOOKUP_API_URL` and `PLATE_LOOKUP_API_KEY`.
+- MobilePatrol search requires authorized provider access. Configure `MOBILEPATROL_API_URL` and `MOBILEPATROL_API_KEY`.
+- LexisNexis search requires authorized account/API access. Configure `LEXISNEXIS_API_URL` and `LEXISNEXIS_API_KEY`.
+- The app does not bypass logins, paywalls, CAPTCHAs, provider terms, or restricted systems.
+
 ## Included deployment files
 
 - `Dockerfile`

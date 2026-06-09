@@ -36,6 +36,15 @@ DEFAULT_DEPARTMENTS = [
         "notes": "Capital District municipal agency seeded for intake associations.",
     },
     {
+        "name": "Rensselaer County Sheriffs Office",
+        "county": "Rensselaer",
+        "address": "4000 Main Street, Troy, NY 12180",
+        "phone": "518-266-1900",
+        "email": "sheriff@rensco.com",
+        "agency_contact": "Investigations",
+        "notes": "Primary county sheriff agency seeded for INVZEO case intake.",
+    },
+    {
         "name": "Saratoga Springs Police Department",
         "county": "Saratoga",
         "address": "5 Lake Ave, Saratoga Springs, NY 12866",

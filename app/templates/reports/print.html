@@ -8,8 +8,12 @@
   <body class="print-view" onload="window.print()">
     <article class="panel print-sheet">
       <h1>{{ report.title }}</h1>
+      <p><strong>Caption:</strong> {{ report.case.case_caption }}</p>
       <p><strong>Case Number:</strong> {{ report.case.case_number }}</p>
       <p><strong>Created:</strong> {{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+      <p><strong>Individual:</strong> {{ report.case.subject_full_name }}</p>
+      <p><strong>DOB / Age:</strong> {{ report.case.subject_dob }} / {{ report.case.subject_age }}</p>
+      <p><strong>Vehicle:</strong> {{ report.case.vehicle_state }} {{ report.case.vehicle_plate }} / VIN {{ report.case.vehicle_vin }}</p>
       <p><strong>Case Summary:</strong> {{ report.summary }}</p>
       <p><strong>Incident Details:</strong> {{ report.case.case_type }} at {{ report.case.incident_location }}</p>
       <p><strong>Timeline:</strong></p>

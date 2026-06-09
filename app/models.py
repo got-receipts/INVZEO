@@ -8,6 +8,10 @@ from flask_login import UserMixin
 from app.extensions import bcrypt, db, login_manager
 
 
+DEFAULT_CASE_CAPTION = "The People Of The State Of NY"
+NOT_AVAILABLE = "N/A"
+
+
 class Role(str, Enum):
     ADMIN = "admin"
     OFFICER = "officer"
@@ -105,7 +109,32 @@ class Case(TimestampMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     case_number = db.Column(db.String(40), unique=True, nullable=False)
+    case_caption = db.Column(
+        db.String(160),
+        default=DEFAULT_CASE_CAPTION,
+        nullable=False,
+    )
     user_name = db.Column(db.String(120), nullable=False)
+    subject_full_name = db.Column(db.String(120), default=NOT_AVAILABLE, nullable=False)
+    subject_aliases = db.Column(db.String(255), default=NOT_AVAILABLE, nullable=False)
+    subject_dob = db.Column(db.String(40), default=NOT_AVAILABLE, nullable=False)
+    subject_age = db.Column(db.String(40), default=NOT_AVAILABLE, nullable=False)
+    subject_sex = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_race = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_ethnicity = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_height = db.Column(db.String(40), default=NOT_AVAILABLE, nullable=False)
+    subject_weight = db.Column(db.String(40), default=NOT_AVAILABLE, nullable=False)
+    subject_hair_color = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_eye_color = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_address = db.Column(db.String(255), default=NOT_AVAILABLE, nullable=False)
+    subject_phone = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_email = db.Column(db.String(255), default=NOT_AVAILABLE, nullable=False)
+    subject_license_number = db.Column(db.String(120), default=NOT_AVAILABLE, nullable=False)
+    subject_license_state = db.Column(db.String(40), default=NOT_AVAILABLE, nullable=False)
+    vehicle_plate = db.Column(db.String(40), default=NOT_AVAILABLE, nullable=False)
+    vehicle_state = db.Column(db.String(40), default="NY", nullable=False)
+    vehicle_vin = db.Column(db.String(80), default=NOT_AVAILABLE, nullable=False)
+    subject_notes = db.Column(db.Text, default=NOT_AVAILABLE, nullable=False)
     officer_contact = db.Column(db.String(160), nullable=False)
     case_type = db.Column(db.String(120), nullable=False)
     incident_location = db.Column(db.String(255), nullable=False)

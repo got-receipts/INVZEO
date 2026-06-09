@@ -35,7 +35,9 @@ def dashboard():
         {"title": "Agencies", "endpoint": url_for("departments.list_departments"), "icon": "shield"},
         {"title": "Reports", "endpoint": url_for("reports.list_reports"), "icon": "doc"},
         {"title": "Public Data", "endpoint": url_for("public.data_sources"), "icon": "globe"},
-        {"title": "Records Search", "endpoint": url_for("public.records_search"), "icon": "search"},
+        {"title": "Source Search", "endpoint": url_for("public.records_search"), "icon": "search"},
+        {"title": "Vehicle Search", "endpoint": url_for("public.vehicle_search"), "icon": "car"},
+        {"title": "Provider Search", "endpoint": url_for("public.authorized_records"), "icon": "database"},
         {"title": "Messages", "endpoint": url_for("messages.inbox"), "icon": "chat"},
         {"title": "Settings", "endpoint": url_for("settings.index"), "icon": "gear"},
     ]

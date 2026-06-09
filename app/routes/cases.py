@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 
 from app.extensions import db
 from app.forms import CaseForm, CaseNoteForm, ReportForm
-from app.models import Case, CaseNote, Department, Report, Role
+from app.models import DEFAULT_CASE_CAPTION, Case, CaseNote, Department, Report, Role
 from app.services.reporting import build_report_summary, generate_pdf
 from app.services.security import (
     ensure_case_access,
@@ -42,10 +42,16 @@ def new_case():
     form.set_department_choices(departments)
     if request.method == "GET":
         form.user_name.data = current_user.full_name
+        form.set_demographic_defaults()
+        default_department = Department.query.filter_by(name="Rensselaer County Sheriffs Office").first()
+        if default_department:
+            form.primary_department_id.data = default_department.id
+            form.department_ids.data = [default_department.id]
 
     if form.validate_on_submit():
         case = Case(
             case_number=generate_case_number(),
+            case_caption=DEFAULT_CASE_CAPTION,
             user_name=form.user_name.data,
             primary_department_id=form.primary_department_id.data,
             officer_contact=form.officer_contact.data,
@@ -55,6 +61,7 @@ def new_case():
             status=form.status.data,
             priority=form.priority.data,
             owner_id=current_user.id,
+            **form.demographic_payload(),
         )
         case.departments = [
             department for department in departments if department.id in set(form.department_ids.data)

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Authorized Records</p>
+    <h1>Provider Search</h1>
+    <p class="lede">Use contracted or official access only. The app does not bypass logins, paywalls, CAPTCHAs, or provider terms.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <form class="stack-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <label>
+        <span>Provider</span>
+        <select name="provider">
+          {% for key, provider in providers.items() %}
+          <option value="{{ key }}" {% if filters.provider == key %}selected{% endif %}>{{ provider.label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label><span>Name</span><input type="text" name="name" value="{{ filters.name }}"></label>
+      <label><span>Date of Birth</span><input type="text" name="dob" value="{{ filters.dob }}"></label>
+      <label><span>County</span><input type="text" name="county" value="{{ filters.county }}"></label>
+      <label><span>State</span><input type="text" name="state" value="{{ filters.state or 'NY' }}"></label>
+      <label><span>Record Type</span><input type="text" name="record_type" value="{{ filters.record_type }}" placeholder="Arrest, booking, public records"></label>
+      <label><span>Case Reference</span><input type="text" name="case_reference" value="{{ filters.case_reference }}"></label>
+    </div>
+    <button class="primary-button" type="submit">Search Authorized Provider</button>
+  </form>
+</section>
+
+{% if results %}
+<section class="panel">
+  <p class="eyebrow">Result</p>
+  <h2>{{ results.status|replace('_', ' ')|title }}</h2>
+  <p class="empty-copy">{{ results.message or '' }}</p>
+  {% if results.official_url %}
+  <div class="button-row panel-actions">
+    <a class="ghost-button link-button" href="{{ results.official_url }}" target="_blank" rel="noreferrer">Open Official Provider</a>
+  </div>
+  {% endif %}
+  {% if results.raw %}
+  <pre class="result-json">{{ results.raw|tojson(indent=2) }}</pre>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

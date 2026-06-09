@@ -13,8 +13,12 @@
 </section>
 <section class="panel">
   <h2>Case Summary</h2>
+  <p class="eyebrow">{{ report.case.case_caption }}</p>
   <p class="narrative-block">{{ report.summary }}</p>
   <dl class="detail-list">
+    <div><dt>Individual</dt><dd>{{ report.case.subject_full_name }}</dd></div>
+    <div><dt>DOB / Age</dt><dd>{{ report.case.subject_dob }} / {{ report.case.subject_age }}</dd></div>
+    <div><dt>Vehicle</dt><dd>{{ report.case.vehicle_state }} {{ report.case.vehicle_plate }} / VIN {{ report.case.vehicle_vin }}</dd></div>
     <div><dt>Incident Details</dt><dd>{{ report.case.case_type }} at {{ report.case.incident_location }}</dd></div>
     <div><dt>Timeline</dt><dd>{{ report.case.activities|length }} activity events</dd></div>
     <div><dt>Attached Departments</dt><dd>{{ report.case.departments|map(attribute='name')|join(', ') }}</dd></div>
