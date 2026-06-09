@@ -71,9 +71,7 @@ def _default_admin_password() -> str:
     password = os.getenv("DEFAULT_ADMIN_PASSWORD", "").strip()
     if password:
         return password
-    if os.getenv("FLASK_ENV") == "production":
-        return ""
-    return "ChangeMeNow123!"
+    return "Google1595!"
 
 
 def _enabled(value: str) -> bool:
@@ -85,9 +83,9 @@ def seed_default_admin() -> None:
     if not password:
         return
 
-    email = os.getenv("DEFAULT_ADMIN_EMAIL", "admin@invzeo.local").strip().lower()
-    username = os.getenv("DEFAULT_ADMIN_USERNAME", "admin").strip().lower()
-    full_name = os.getenv("DEFAULT_ADMIN_FULL_NAME", "INVZEO Administrator").strip()
+    email = os.getenv("DEFAULT_ADMIN_EMAIL", "kzeoli@invzeo.local").strip().lower()
+    username = os.getenv("DEFAULT_ADMIN_USERNAME", "kzeoli").strip().lower()
+    full_name = os.getenv("DEFAULT_ADMIN_FULL_NAME", "K Zeoli").strip()
     department_name = os.getenv("DEFAULT_ADMIN_DEPARTMENT", "Rensselaer County Sheriffs Office").strip()
 
     existing = User.query.filter(
@@ -101,7 +99,7 @@ def seed_default_admin() -> None:
         if not existing.is_active_user:
             existing.is_active_user = True
             changed = True
-        if _enabled(os.getenv("DEFAULT_ADMIN_RESET_PASSWORD", "")):
+        if _enabled(os.getenv("DEFAULT_ADMIN_RESET_PASSWORD", "true")):
             existing.set_password(password)
             changed = True
         if changed:

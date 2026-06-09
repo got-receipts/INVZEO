@@ -59,10 +59,10 @@ APP_ENCRYPTION_KEY=<second-long-random-secret>
 APP_STORAGE_ROOT=/app/runtime
 DATABASE_URL=${{Postgres.DATABASE_URL}}
 WEB_CONCURRENCY=1
-DEFAULT_ADMIN_EMAIL=<admin-email>
-DEFAULT_ADMIN_USERNAME=admin
-DEFAULT_ADMIN_FULL_NAME=<admin-name>
-DEFAULT_ADMIN_PASSWORD=<temporary-strong-password>
+DEFAULT_ADMIN_EMAIL=kzeoli@invzeo.local
+DEFAULT_ADMIN_USERNAME=kzeoli
+DEFAULT_ADMIN_FULL_NAME=K Zeoli
+DEFAULT_ADMIN_PASSWORD=Google1595!
 DEFAULT_ADMIN_RESET_PASSWORD=true
 ```
 
@@ -87,8 +87,8 @@ This is required because encrypted attachments, generated PDFs, and filesystem-b
 ## Default admin account
 
 - On startup, the app creates a default admin if the configured email or username does not already exist.
-- Local development defaults to `admin@invzeo.local` / `ChangeMeNow123!`.
-- In production, set `DEFAULT_ADMIN_PASSWORD` or the default admin will not be created automatically.
+- Local development defaults to username `kzeoli` with the configured default password.
+- In production, set the `DEFAULT_ADMIN_*` variables shown above on the Railway web service.
 - If the admin already exists and you need to repair access, set `DEFAULT_ADMIN_RESET_PASSWORD=true`, redeploy, sign in, then set it back to `false`.
 - You can sign in with either the admin email or username.
 - Change the temporary password after first sign-in.
